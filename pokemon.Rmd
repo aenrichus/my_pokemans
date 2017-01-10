@@ -1,0 +1,29 @@
+---
+title: "pokemon"
+output: html_document
+---
+
+```{r}
+library(dplyr)
+library(ggplot2)
+
+pokemon <- read.csv("pokemon.csv")
+```
+
+```{r}
+qplot(cp, cp_new, data = pokemon, color = species)
+
+model_cp <- lm(cp_new ~ cp * hp + power_up_stardust, data = pokemon)
+summary(model_cp)
+```
+
+We can account for 98% of the variance in evolved CP based upon pre-evolved CP, HP, the interaction between CP and HP, and the amount of stardust necessary to power up the pokemon. This amount of stardust appears to be a stand in for how far powered up the pokemon is before evolving. Accounting for species and hp provides a marginal increase in prediction.
+
+```{r}
+qplot(hp, hp_new, data = pokemon, color = species)
+
+model_hp <- lm(hp_new ~ hp + cp * weight * height, data = pokemon)
+summary(model_hp)
+```
+
+We can account for 96% of the variance in evolved HP based upon pre-evolved HP, CP, weight, height, and all interactions between CP, weight, and height. Species and amount of stardust seem to have no effect on evolved HP.
